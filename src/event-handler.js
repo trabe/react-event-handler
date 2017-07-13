@@ -56,8 +56,8 @@ class EventHandler extends Component {
 
   delay = ({ handler, delay }) => event => this.setTimeout(() => handler(event), delay);
 
-  normalizeProp = arg => typeof arg === "function" ? { handler: arg, delay: 0 } : arg;
-  normalizeChildren = children => typeof children === "string" ? <span>{children}</span> : children;
+  normalizeProp = arg => (typeof arg === "function" ? { handler: arg, delay: 0 } : arg);
+  normalizeChildren = children => (typeof children === "string" ? <span>{children}</span> : children);
 
   handleDocumentClick = event => {
     const { onClickAnywhere } = this.eventHandlers;
@@ -102,6 +102,7 @@ EventHandler.propTypes = {
   onMouseLeave: HandlerType,
   onFocus: HandlerType,
   onBlur: HandlerType,
+  children: PropTypes.element,
 };
 
 export default EventHandler;
