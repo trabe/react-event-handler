@@ -40,6 +40,10 @@ Props can either be simple handler function or an object with the properties `ha
 
 ## CHANGELOG
 
+## v0.1.3
+
+* Fix propType added in v0.1.2 :(
+
 ### v0.1.2
 
 * Added missing propType

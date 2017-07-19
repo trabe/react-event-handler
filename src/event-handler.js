@@ -102,7 +102,7 @@ EventHandler.propTypes = {
   onMouseLeave: HandlerType,
   onFocus: HandlerType,
   onBlur: HandlerType,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
 };
 
 export default EventHandler;
