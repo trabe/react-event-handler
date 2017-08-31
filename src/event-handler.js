@@ -37,7 +37,7 @@ class EventHandler extends Component {
 
   getEventHandlers = props =>
     pipe(
-      pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onClickAnywhere"]),
+      pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onClickAnywhere", "onContextMenu"]),
       map(this.normalizeProp),
       map(this.delay),
     )(props);
@@ -54,9 +54,15 @@ class EventHandler extends Component {
     }
   };
 
-  delay = ({ handler, delay }) => event => this.setTimeout(() => handler(event), delay);
+  delay = ({ handler, delay, propagate = true }) => event => {
+    if (!propagate) {
+      event.stopPropagation();
+    }
+    delay === undefined ? handler(event) : this.setTimeout(() => handler(event), delay);
+    return propagate;
+  }
 
-  normalizeProp = arg => (typeof arg === "function" ? { handler: arg, delay: 0 } : arg);
+  normalizeProp = arg => (typeof arg === "function" ? { handler: arg } : arg);
   normalizeChildren = children => (typeof children === "string" ? <span>{children}</span> : children);
 
   handleDocumentClick = event => {
@@ -83,7 +89,7 @@ class EventHandler extends Component {
   render = () =>
     React.cloneElement(
       Children.only(this.normalizeChildren(this.props.children)),
-      pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick"], this.eventHandlers),
+      pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onContextMenu"], this.eventHandlers),
     );
 }
 
