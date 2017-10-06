@@ -1,69 +1,71 @@
 import React, { Component, Children } from "react";
 import PropTypes from "prop-types";
-import { pick, pipe, map } from "ramda";
+import { pick, pipe, map, mapObjIndexed } from "ramda";
 
 class EventHandler extends Component {
   constructor(props) {
     super(props);
     this.eventHandlers = this.getEventHandlers(props);
-    this.timeout = null;
-    this.state = { listening: false };
+    this.timeouts = {};
+    this.state = {
+      listening: {
+        onClickAnywhere: false,
+        onContextMenuAnywhere: false,
+      },
+    };
   }
 
   componentDidMount() {
-    if (this.shouldStartListening(this.props)) {
-      this.startListening();
-    }
+    this.manageListeners();
   }
 
   componentWillReceiveProps(newProps) {
     this.eventHandlers = this.getEventHandlers(newProps);
-
-    if (this.shouldStartListening(newProps)) {
-      this.startListening();
-    }
-
-    if (this.shouldStopListening(newProps)) {
-      this.stopListening();
-    }
+    this.manageListeners();
   }
 
   componentWillUnmount() {
-    if (this.state.listening) {
-      this.stopListening();
-    }
-    this.clearTimeout();
+    this.stopListeners();
+    this.clearTimeouts();
   }
 
   getEventHandlers = props =>
     pipe(
-      pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onClickAnywhere", "onContextMenu"]),
+      pick([
+        "onMouseEnter",
+        "onMouseLeave",
+        "onFocus",
+        "onBlur",
+        "onClick",
+        "onClickAnywhere",
+        "onContextMenu",
+        "onContextMenuAnywhere",
+      ]),
       map(this.normalizeProp),
+      mapObjIndexed(this.injectHandlerName),
       map(this.delay),
     )(props);
 
-  setTimeout = (handler, delay) => {
-    this.clearTimeout();
-    this.timeout = setTimeout(handler, delay);
+  injectHandlerName = (v, k) => ({ handlerName: k, ...v });
+
+  setTimeout = (handlerName, handler, delay) => {
+    clearTimeout(this.timeouts[handlerName]);
+    this.timeouts[handlerName] = setTimeout(handler, delay);
   };
 
-  clearTimeout = () => {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = null;
-    }
-  };
+  clearTimeouts = () => map(clearTimeout, this.timeouts);
 
-  delay = ({ handler, delay, propagate = true }) => event => {
-    if (!propagate) {
-      event.stopPropagation();
-    }
-    delay === undefined ? handler(event) : this.setTimeout(() => handler(event), delay);
-    return propagate;
-  }
+  delay = ({ handlerName, handler, delay, propagate = true }) =>
+    event => {
+      if (!propagate) {
+        event.stopPropagation();
+      }
+      delay === undefined ? handler(event) : this.setTimeout(handlerName, () => handler(event), delay);
+      return propagate;
+    };
 
-  normalizeProp = arg => (typeof arg === "function" ? { handler: arg } : arg);
-  normalizeChildren = children => (typeof children === "string" ? <span>{children}</span> : children);
+  normalizeProp = arg => typeof arg === "function" ? { handler: arg } : arg;
+  normalizeChildren = children => typeof children === "string" ? <span>{children}</span> : children;
 
   handleDocumentClick = event => {
     const { onClickAnywhere } = this.eventHandlers;
@@ -73,18 +75,38 @@ class EventHandler extends Component {
     }
   };
 
-  shouldStartListening = props => !this.state.listening && props.onClickAnywhere;
-  shouldStopListening = props => this.state.listening && !props.onClickAnywhere;
+  handleContextMenuClick = event => {
+    const { onContextMenuAnywhere } = this.eventHandlers;
 
-  startListening = () => {
-    document.addEventListener("click", this.handleDocumentClick, true);
-    this.setState({ listening: true });
+    if (onContextMenuAnywhere) {
+      onContextMenuAnywhere(event);
+    }
   };
 
-  stopListening = () => {
+  stopListeners = () => {
     document.removeEventListener("click", this.handleDocumentClick, true);
-    this.setState({ listening: false });
-  };
+    document.removeEventListener("contextmenu", this.handleContextMenuClick, true);
+  }
+
+  manageListeners = () => {
+    this.stopListeners();
+
+    const shouldListen = {
+      onClickAnywhere: Boolean(this.props.onClickAnywhere),
+      onContextMenuAnywhere: Boolean(this.props.onContextMenuAnywhere)
+    };
+
+    if (shouldListen.onClickAnywhere) {
+      document.addEventListener("click", this.handleDocumentClick, true);
+    }
+
+    if (shouldListen.onContextMenuAnywhere) {
+      document.addEventListener("contextmenu", this.handleContextMenuClick, true);
+    }
+
+    this.setState({ listening: shouldListen });
+  }
+
 
   render = () =>
     React.cloneElement(
@@ -104,6 +126,8 @@ const HandlerType = PropTypes.oneOfType([
 EventHandler.propTypes = {
   onClick: HandlerType,
   onClickAnywhere: HandlerType,
+  onContextMenu: HandlerType,
+  onContextMenuAnywhere: HandlerType,
   onMouseEnter: HandlerType,
   onMouseLeave: HandlerType,
   onFocus: HandlerType,

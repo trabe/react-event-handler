@@ -10,9 +10,10 @@ const testEvent = (eventName, delay) =>
 
     const handler = () => {
       try {
-        expect(Date.now() - start).toBeGreaterThan(delay || 0);
+        expect(Date.now() - start).toBeGreaterThanOrEqual(delay || 0);
         done();
       } catch (err) {
+        console.log("SHIAT", err);
         done.fail();
       }
     };
