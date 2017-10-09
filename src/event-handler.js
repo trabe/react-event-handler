@@ -92,8 +92,8 @@ class EventHandler extends Component {
     this.stopListeners();
 
     const shouldListen = {
-      onClickAnywhere: Boolean(this.props.onClickAnywhere),
-      onContextMenuAnywhere: Boolean(this.props.onContextMenuAnywhere)
+      onClickAnywhere: Boolean(this.eventHandlers.onClickAnywhere),
+      onContextMenuAnywhere: Boolean(this.eventHandlers.onContextMenuAnywhere)
     };
 
     if (shouldListen.onClickAnywhere) {
