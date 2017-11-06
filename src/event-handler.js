@@ -83,8 +83,8 @@ class EventHandler extends Component {
   };
 
   stopListeners = () => {
-    document.removeEventListener("click", this.handleDocumentClick, true);
-    document.removeEventListener("contextmenu", this.handleContextMenuClick, true);
+    document.removeEventListener("click", this.handleDocumentClick);
+    document.removeEventListener("contextmenu", this.handleContextMenuClick);
   };
 
   manageListeners = () => {
@@ -96,11 +96,11 @@ class EventHandler extends Component {
     };
 
     if (shouldListen.onClickAnywhere) {
-      document.addEventListener("click", this.handleDocumentClick, true);
+      document.addEventListener("click", this.handleDocumentClick);
     }
 
     if (shouldListen.onContextMenuAnywhere) {
-      document.addEventListener("contextmenu", this.handleContextMenuClick, true);
+      document.addEventListener("contextmenu", this.handleContextMenuClick);
     }
 
     this.setState({ listening: shouldListen });
