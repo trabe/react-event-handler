@@ -55,17 +55,16 @@ class EventHandler extends Component {
 
   clearTimeouts = () => map(clearTimeout, this.timeouts);
 
-  delay = ({ handlerName, handler, delay, propagate = true }) =>
-    event => {
-      if (!propagate) {
-        event.stopPropagation();
-      }
-      delay === undefined ? handler(event) : this.setTimeout(handlerName, () => handler(event), delay);
-      return propagate;
-    };
+  delay = ({ handlerName, handler, delay, propagate = true }) => event => {
+    if (!propagate) {
+      event.stopPropagation();
+    }
+    delay === undefined ? handler(event) : this.setTimeout(handlerName, () => handler(event), delay);
+    return propagate;
+  };
 
-  normalizeProp = arg => typeof arg === "function" ? { handler: arg } : arg;
-  normalizeChildren = children => typeof children === "string" ? <span>{children}</span> : children;
+  normalizeProp = arg => (typeof arg === "function" ? { handler: arg } : arg);
+  normalizeChildren = children => (typeof children === "string" ? <span>{children}</span> : children);
 
   handleDocumentClick = event => {
     const { onClickAnywhere } = this.eventHandlers;
@@ -86,14 +85,14 @@ class EventHandler extends Component {
   stopListeners = () => {
     document.removeEventListener("click", this.handleDocumentClick, true);
     document.removeEventListener("contextmenu", this.handleContextMenuClick, true);
-  }
+  };
 
   manageListeners = () => {
     this.stopListeners();
 
     const shouldListen = {
       onClickAnywhere: Boolean(this.eventHandlers.onClickAnywhere),
-      onContextMenuAnywhere: Boolean(this.eventHandlers.onContextMenuAnywhere)
+      onContextMenuAnywhere: Boolean(this.eventHandlers.onContextMenuAnywhere),
     };
 
     if (shouldListen.onClickAnywhere) {
@@ -105,8 +104,7 @@ class EventHandler extends Component {
     }
 
     this.setState({ listening: shouldListen });
-  }
-
+  };
 
   render = () =>
     React.cloneElement(
