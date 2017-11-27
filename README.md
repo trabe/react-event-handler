@@ -1,5 +1,7 @@
 # react-event-handler
 
+[![Build Status](https://travis-ci.org/trabe/react-event-handler.svg?branch=master)](https://travis-ci.org/trabe/react-event-handler)
+
 ## Description
 
 react-event-handler is a component that allows you to handle the events of children elements, delay the invocation of
