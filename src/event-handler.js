@@ -25,7 +25,7 @@ class EventHandler extends Component {
   }
 
   componentWillUnmount() {
-    this.stopListeners();
+    this.stopAllListeners();
     this.clearTimeouts();
   }
 
@@ -82,26 +82,64 @@ class EventHandler extends Component {
     }
   };
 
-  stopListeners = () => {
+  stopAllListeners = () => {
+    this.stopOnClickAnywhereListener();
+    this.stopOnContextMenuListener();
+  };
+
+  startOnClickAnywhereListener = () => {
+    document.addEventListener("click", this.handleDocumentClick);
+  };
+
+  stopOnClickAnywhereListener = () => {
     document.removeEventListener("click", this.handleDocumentClick);
+  };
+
+  startOnContextMenuListener = () => {
+    document.addEventListener("contextmenu", this.handleContextMenuClick);
+  };
+
+  stopOnContextMenuListener = () => {
     document.removeEventListener("contextmenu", this.handleContextMenuClick);
   };
 
+  startOrStopListenerFactory = (start, stop) => ({ listening, shouldListen }) => {
+    if (listening && !shouldListen) {
+      stop();
+    }
+
+    if (!listening && shouldListen) {
+      start();
+    }
+  };
+
+  startOrStopOnClickAnywhereListener = this.startOrStopListenerFactory(
+    this.startOnClickAnywhereListener,
+    this.stopOnClickAnywhereListener,
+  );
+
+  startOrStopOnContextMenuListener = this.startOrStopListenerFactory(
+    this.startOnContextMenuListener,
+    this.stopOnContextMenuListener,
+  );
+
   manageListeners = () => {
-    this.stopListeners();
+    const { listening } = this.state;
 
     const shouldListen = {
       onClickAnywhere: Boolean(this.eventHandlers.onClickAnywhere),
       onContextMenuAnywhere: Boolean(this.eventHandlers.onContextMenuAnywhere),
     };
 
-    if (shouldListen.onClickAnywhere) {
-      document.addEventListener("click", this.handleDocumentClick);
-    }
+    this.startOrStopOnClickAnywhereListener({
+      listening: listening.onClickAnywhere,
+      shouldListen: shouldListen.onClickAnywhere,
+    });
 
-    if (shouldListen.onContextMenuAnywhere) {
-      document.addEventListener("contextmenu", this.handleContextMenuClick);
-    }
+    this.startOrStopOnContextMenuListener({
+      listening: listening.onContextMenuAnywhere,
+      shouldListen: shouldListen.onContextMenuAnywhere,
+    });
 
     this.setState({ listening: shouldListen });
   };
