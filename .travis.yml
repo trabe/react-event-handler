@@ -5,5 +5,13 @@ node_js:
 - '8'
 - '9'
 cache:
-    directories:
-      - "node_modules"
+  directories:
+  - node_modules
+deploy:
+  provider: npm
+  email: contact@trabesoluciones.com
+  api_key:
+    secure: NtRTKR17N2tWwoyFauPorHISXUudI6wJx/1p4loZlQhZH3lSLVkZvKYgk/ihnrPYHp8DmDLpks+iXy1cs9S2ySXMnS14AQ+nVe5ofWfHA/6Wj4XQgNdFW/S0inkzhZU8NgwOMgC+QYtTuCh4a9DMxz0/C71fwz6h/iW5AMEYfPzgP3qH5Nh9nE97RGo+DhW6/jQXfTBUx95sdViNIcBF/UGVUpC68aI2vNYLATa7oV5bina+kmAhjvNcqLD+J/zMHsAbTtLrEoV5n1H3EraCTyyaq9mOpPrsGhdjBrDZqwf36xMT/6ixEAaRHjcCW9Pktchk42Q8rsOQKdgS6DZ81as3qR1BZLNhQPh6aHEr0sI7bX05i7X1sXK/BIYnpXK1G90X3hRJH0oAZidAvR7rwg9urUrvc5M95GSnf8IBZR3zQ6+ucRc/pGRfR8yxFJ/A9lKfu9PGyvb1m1hDYkvtg8zAdC3g1LfavZFR+zgcEB4sL4t4x3RGQ2f2L9O819c6HP2cEY/TZAIkspnAiW99SDCdDfiS78e5tSTDm8pj7GKAOfbrEGzCyY5C7+po6KgZRlrmOaouL8q3lr8FTrxJWJ8DwXb8xP8s55+/7QNNWIMzInJdvkWrXD4nPjwJGtM554MtFer6BEgnZRiurccaWU/TgeRLobpGD3ihPJJB7Js=
+  on:
+    tags: true
+    repo: trabe/react-event-handler
