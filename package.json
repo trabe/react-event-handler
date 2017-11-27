@@ -1,6 +1,6 @@
 {
   "name": "react-event-handler",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "react component to easily manage events",
   "main": "lib/event-handler.js",
   "repository": {

@@ -40,6 +40,10 @@ Props can either be simple handler function or an object with the properties `ha
 
 ## CHANGELOG
 
+### v0.3.3
+
+* Fix event handler adding and removing document listeners whenever the component received props
+
 ### v0.3.2
 
 * Trigger document events on bubbling phase instead of capture phase
