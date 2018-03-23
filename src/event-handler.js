@@ -64,7 +64,6 @@ class EventHandler extends Component {
   };
 
   normalizeProp = arg => (typeof arg === "function" ? { handler: arg } : arg);
-  normalizeChildren = children => (typeof children === "string" ? <span>{children}</span> : children);
 
   handleDocumentClick = event => {
     const { onClickAnywhere } = this.eventHandlers;
@@ -144,11 +143,17 @@ class EventHandler extends Component {
     this.setState({ listening: shouldListen });
   };
 
-  render = () =>
-    React.cloneElement(
-      Children.only(this.normalizeChildren(this.props.children)),
-      pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onContextMenu"], this.eventHandlers),
+  render = () => {
+    const Wrapper = this.props.wrapper;
+
+    return (
+      <Wrapper
+        {...pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onContextMenu"], this.eventHandlers)}
+      >
+        {this.props.children}
+      </Wrapper>
     );
+  };
 }
 
 const HandlerType = PropTypes.oneOfType([
@@ -160,6 +165,7 @@ const HandlerType = PropTypes.oneOfType([
 ]);
 
 EventHandler.propTypes = {
+  wrapper: PropTypes.any,
   onClick: HandlerType,
   onClickAnywhere: HandlerType,
   onContextMenu: HandlerType,
@@ -169,6 +175,10 @@ EventHandler.propTypes = {
   onFocus: HandlerType,
   onBlur: HandlerType,
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+};
+
+EventHandler.defaultProps = {
+  wrapper: "span",
 };
 
 export default EventHandler;
