@@ -24,7 +24,7 @@ const testEvent = (eventName, delay) =>
       </EventHandler>,
     );
 
-    wrapper.find("div").simulate(eventName);
+    wrapper.find("span").simulate(eventName);
   };
 
 describe("Snapshots", () => {
@@ -32,6 +32,15 @@ describe("Snapshots", () => {
     it("should render its child", () => {
       const wrapper = shallow(
         <EventHandler>
+          <div>this should be seen</div>
+        </EventHandler>,
+      );
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it("should use a custom wrapper", () => {
+      const wrapper = shallow(
+        <EventHandler wrapper="div">
           <div>this should be seen</div>
         </EventHandler>,
       );

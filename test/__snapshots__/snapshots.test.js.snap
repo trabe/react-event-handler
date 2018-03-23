@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Snapshots EventHandler should render its child 1`] = `
+<span>
+  <div>
+    this should be seen
+  </div>
+</span>
+`;
+
+exports[`Snapshots EventHandler should use a custom wrapper 1`] = `
 <div>
-  this should be seen
+  <div>
+    this should be seen
+  </div>
 </div>
 `;
