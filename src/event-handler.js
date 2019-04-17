@@ -1,4 +1,4 @@
-import React, { Component, Children } from "react";
+import React, { Component, Children, forwardRef } from "react";
 import PropTypes from "prop-types";
 import { pick, pipe, map, mapObjIndexed } from "ramda";
 
@@ -150,6 +150,7 @@ class EventHandler extends Component {
 
     return (
       <Wrapper
+        ref={this.props.forwardRef}
         {...pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onContextMenu"], this.eventHandlers)}
       >
         {this.props.children}
@@ -157,6 +158,7 @@ class EventHandler extends Component {
     );
   };
 }
+
 
 const HandlerType = PropTypes.oneOfType([
   PropTypes.func,
@@ -183,4 +185,8 @@ EventHandler.defaultProps = {
   wrapper: "span",
 };
 
-export default EventHandler;
+const withForwardRef = Component => forwardRef((props, ref) => {
+  return <Component {...props} forwardedRef={ref} />;
+});
+
+export default withForwardRef(EventHandler);
