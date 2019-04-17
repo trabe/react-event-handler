@@ -42,6 +42,11 @@ Props can either be simple handler function or an object with the properties `ha
 
 ## CHANGELOG
 
+### v0.5.0
+
+* Add support for React 16.8
+* Update dependencies
+
 ### v0.4.0
 
 * Add wrapper prop to configure the wrapper used by react-event-handler
