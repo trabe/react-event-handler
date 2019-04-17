@@ -1,17 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Snapshots EventHandler should render its child 1`] = `
-<span>
+<EventHandler
+  forwardedRef={null}
+  wrapper="span"
+>
   <div>
     this should be seen
   </div>
-</span>
+</EventHandler>
 `;
 
 exports[`Snapshots EventHandler should use a custom wrapper 1`] = `
-<div>
+<EventHandler
+  forwardedRef={null}
+  wrapper="div"
+>
   <div>
     this should be seen
   </div>
-</div>
+</EventHandler>
 `;

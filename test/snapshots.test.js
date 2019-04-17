@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 import EventHandler from "../src/event-handler";
 
 const buildHandlerName = eventName => "on" + eventName.charAt(0).toUpperCase() + eventName.slice(1);
@@ -18,12 +18,11 @@ const testEvent = (eventName, delay) =>
       }
     };
 
-    const wrapper = shallow(
+    const wrapper = mount(
       <EventHandler {...{ [buildHandlerName(eventName)]: delay ? { handler, delay } : handler }}>
         <div>hey!</div>
       </EventHandler>,
     );
-
     wrapper.find("span").simulate(eventName);
   };
 
