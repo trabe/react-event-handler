@@ -42,6 +42,10 @@ Props can either be simple handler function or an object with the properties `ha
 
 ## CHANGELOG
 
+### v0.5.1
+
+* Fix typo in forwarded ref prop
+
 ### v0.5.0
 
 * Add support for React 16.8

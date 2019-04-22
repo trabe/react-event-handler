@@ -150,7 +150,7 @@ class EventHandler extends Component {
 
     return (
       <Wrapper
-        ref={this.props.forwardRef}
+        ref={this.props.forwardedRef}
         {...pick(["onMouseEnter", "onMouseLeave", "onFocus", "onBlur", "onClick", "onContextMenu"], this.eventHandlers)}
       >
         {this.props.children}
