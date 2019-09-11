@@ -55,16 +55,15 @@ class EventHandler extends Component {
 
   clearTimeouts = () => map(clearTimeout, this.timeouts);
 
-  delay = ({ handlerName, handler, delay, propagate = true }) =>
-    event => {
-      if (!propagate) {
-        event.stopPropagation();
-      }
-      delay === undefined ? handler(event) : this.setTimeout(handlerName, () => handler(event), delay);
-      return propagate;
-    };
+  delay = ({ handlerName, handler, delay, propagate = true }) => event => {
+    if (!propagate) {
+      event.stopPropagation();
+    }
+    delay === undefined ? handler(event) : this.setTimeout(handlerName, () => handler(event), delay);
+    return propagate;
+  };
 
-  normalizeProp = arg => typeof arg === "function" ? { handler: arg } : arg;
+  normalizeProp = arg => (typeof arg === "function" ? { handler: arg } : arg);
 
   handleDocumentClick = event => {
     const { onClickAnywhere } = this.eventHandlers;
@@ -103,16 +102,15 @@ class EventHandler extends Component {
     document.removeEventListener("contextmenu", this.handleContextMenuClick);
   };
 
-  startOrStopListenerFactory = (start, stop) =>
-    ({ listening, shouldListen }) => {
-      if (listening && !shouldListen) {
-        stop();
-      }
+  startOrStopListenerFactory = (start, stop) => ({ listening, shouldListen }) => {
+    if (listening && !shouldListen) {
+      stop();
+    }
 
-      if (!listening && shouldListen) {
-        start();
-      }
-    };
+    if (!listening && shouldListen) {
+      start();
+    }
+  };
 
   startOrStopOnClickAnywhereListener = this.startOrStopListenerFactory(
     this.startOnClickAnywhereListener,
@@ -159,7 +157,6 @@ class EventHandler extends Component {
   };
 }
 
-
 const HandlerType = PropTypes.oneOfType([
   PropTypes.func,
   PropTypes.shape({
@@ -185,8 +182,9 @@ EventHandler.defaultProps = {
   wrapper: "span",
 };
 
-const withForwardRef = Component => forwardRef((props, ref) => {
-  return <Component {...props} forwardedRef={ref} />;
-});
+const withForwardRef = Component =>
+  forwardRef((props, ref) => {
+    return <Component {...props} forwardedRef={ref} />;
+  });
 
 export default withForwardRef(EventHandler);
