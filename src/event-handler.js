@@ -19,7 +19,7 @@ class EventHandler extends Component {
     this.manageListeners();
   }
 
-  componentWillReceiveProps(newProps) {
+  UNSAFE_componentWillReceiveProps(newProps) {
     this.eventHandlers = this.getEventHandlers(newProps);
     this.manageListeners();
   }

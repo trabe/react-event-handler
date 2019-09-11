@@ -33,7 +33,7 @@
     "prepublish": "npm run compile"
   },
   "peerDependencies": {
-    "react": ">= 0.14.x"
+    "react": ">= 16.3.0"
   },
   "dependencies": {
     "prop-types": "^15.5.8",
